@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: authentication-service
+  namespace: ns-sample  
+  labels:
+    name: spring-authenticationservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: authentication-service
+        app: authentication-service
+    spec:
+      containers:
+      - name: authentication-service
+        image: anthonydenecheau/k8s-authenticationservice:k8s-authenticationservice-master-20180708105205-5
+        ports:
+          - name: http
+            containerPort: 8095       

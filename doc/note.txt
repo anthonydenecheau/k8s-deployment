@@ -1,0 +1,59 @@
+
+http://192.168.99.100:30561/env
+http://192.168.99.100:30561/api/dog/v1/dogs/1
+
+curl  eagleeye:thisissecret@192.168.99.100:32328/auth/oauth/token -d grant_type=password -client_id=eagleeye  -d scope=webclient -d username=HrsPfurTg4wtk9KQPYC9 -d password=pwd
+curl -H "Authorization: Bearer 876fd5a1-c614-484f-a636-a8a7a536a2f8" http://192.168.99.100:32328/auth/user
+curl -H "Authorization: Bearer 876fd5a1-c614-484f-a636-a8a7a536a2f8" http://192.168.99.100:31442/api/dog/v1/dogs/1
+
+curl -H "X-SCC-authentification: HrsPfurTg4wtk9KQPYC9" http://192.168.99.100:31442/api/dog/v1/dogs/1
+curl -H "X-SCC-authentification: Its06Tfcshew8HQeVmP80" http://192.168.99.100:31442/api/dog/v1/dogs/1
+
+## readiness, liveness
+curl -v http://192.168.99.100:30920/info
+
+## deployment 
+kubectl get svc --all-namespaces
+kubectl get svc -n ns-sample
+
+kubectl delete svc,deploy -l name=dog-service -n ns-sample  
+kubectl create -f mysql-deployment.yaml
+kubectl apply -f mysql-deployment.yaml
+
+## secret - https://kubernetes.io/docs/concepts/configuration/secret/
+echo -n 'eagleeye' | base64
+echo -n 'thisissecret' | base64
+echo -n 'webclient' | base64
+echo -n 'password' | base64
+echo -n 'pwd' | base64
+
+## monitoring 
+# https://github.com/giantswarm/kubernetes-prometheus
+# plugin : https://grafana.com/plugins/grafana-kubernetes-app
+
+## tracing jaeger
+# https://github.com/jaegertracing/jaeger-kubernetes
+kubectl  svc/jaeger-query -> NodePort
+http://192.168.99.100:30413/search
+
+logs: sidecar jaeger-agent
+kubectl logs gateway-6c8c4df5bd-rg7lb jaeger-agent -n ns-sample
+
+# https://github.com/opentracing-contrib/java-spring-cloud
+# https://github.com/opentracing-contrib/java-spring-jaeger
+# https://developers.redhat.com/blog/2017/07/10/using-opentracing-with-jaeger-to-collect-application-metrics-in-kubernetes/
+
+
+
+
+# https://hk.saowen.com/a/544579559002cad33d89a3db0f0424a76b2d057abe9e73e09e01b7e64080a9c3
+# https://github.com/giantswarm/kubernetes-elastic-stack
+# https://github.com/fluent/fluentd-kubernetes-daemonset/issues/90
+      containers:
+      - name: fluentd
+         image: fluent/fluentd-kubernetes-daemonset:v0.12-alpine-s3
+         command:
+           - fluentd
+           - -c
+           - /fluentd/etc/fluent.conf
+           

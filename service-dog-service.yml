@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dog-service
+  namespace: ns-sample 
+  labels:
+    name: dog-service
+spec:
+  type: NodePort
+  selector:
+    name: dog-service
+  ports:
+    - name: http
+      port: 8090
+      targetPort: http
