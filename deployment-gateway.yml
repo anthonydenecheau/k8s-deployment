@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: anthonydenecheau/k8s-gateway:k8s-gateway-master-20180712143641-19
+        image: anthonydenecheau/k8s-gateway:k8s-gateway-master-20180730181835-20
         env:
           - name: JAVA_OPTS
             value: "-Duser.timezone=Europe/Paris -Xmx512m"
